@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: snapgallery-backend
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: 25MB
+      max-request-size: 250MB
+
+app:
+  jwt:
+    secret: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+    expiration-ms: 86400000 # 24 hours
+    gallery-session-expiration-ms: 7200000 # 2 hours
+  s3:
+    bucket: ${AWS_S3_BUCKET:snapgallery-demo-bucket}
+    region: ${AWS_REGION:us-east-1}
+    access-key: ${AWS_ACCESS_KEY_ID:demo}
+    secret-key: ${AWS_SECRET_ACCESS_KEY:demo}
+    local-fallback-dir: ./uploads
+
+server:
+  port: 8080
