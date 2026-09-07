@@ -6,7 +6,6 @@ import { useAuth } from '../contexts/AuthContext';
 import { Calendar, UploadCloud, Image as ImageIcon, MapPin, CheckCircle } from 'lucide-react';
 import { UploadModal } from '../components/UploadModal';
 import { Lightbox } from '../components/Lightbox';
-import { Navbar } from '../components/Navbar';
 
 export const MemberDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -43,166 +42,162 @@ export const MemberDashboard: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAFAFA] text-zinc-900 pb-16">
-      <Navbar title="Photographer" subtitle="Workspace" />
-
-      <div className="pt-20 px-4 sm:px-8 max-w-[1440px] mx-auto space-y-8">
-        {/* Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200 pb-6">
-          <div>
-            <h1 className="text-3xl font-display font-extrabold text-zinc-900 tracking-tight flex items-center gap-3">
-              <span>Photographer Workspace</span>
-              <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
-                Team Member
-              </span>
-            </h1>
-            <p className="text-xs text-zinc-500 mt-1">Welcome back, {user?.name}. Ingest and track your assigned event photos.</p>
-          </div>
-
-          {/* Tab Buttons */}
-          <div className="flex items-center p-1 bg-zinc-100 border border-zinc-200/60 rounded-xl self-start sm:self-auto">
-            <button
-              onClick={() => setActiveTab('EVENTS')}
-              className={`px-4 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                activeTab === 'EVENTS'
-                  ? 'bg-zinc-900 text-white shadow-xs'
-                  : 'text-zinc-500 hover:text-zinc-900'
-              }`}
-            >
-              Assigned Events ({events.length})
-            </button>
-            <button
-              onClick={() => setActiveTab('UPLOADS')}
-              className={`px-4 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                activeTab === 'UPLOADS'
-                  ? 'bg-zinc-900 text-white shadow-xs'
-                  : 'text-zinc-500 hover:text-zinc-900'
-              }`}
-            >
-              My Uploads ({myPhotos.length})
-            </button>
-          </div>
+    <div className="p-6 sm:p-8 max-w-[1440px] mx-auto space-y-8 text-zinc-900 pb-16">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-zinc-200 pb-6">
+        <div>
+          <h1 className="text-3xl font-display font-extrabold text-zinc-900 tracking-tight flex items-center gap-3">
+            <span>Photographer Workspace</span>
+            <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-700 border border-emerald-200">
+              Team Member
+            </span>
+          </h1>
+          <p className="text-xs text-zinc-500 mt-1">Welcome back, {user?.name}. Ingest and track your assigned event photos.</p>
         </div>
 
-        {isLoading ? (
-          <div className="p-12 text-center text-zinc-400 font-mono text-xs">Loading workspace...</div>
-        ) : activeTab === 'EVENTS' ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {events.length === 0 ? (
-              <div className="col-span-full p-12 text-center bg-white border border-zinc-200/80 rounded-2xl">
-                <Calendar className="w-10 h-10 text-zinc-300 mx-auto mb-3" />
-                <p className="text-sm font-semibold text-zinc-800">No Events Assigned Yet</p>
-                <p className="text-xs text-zinc-400 mt-1">Your Admin Lead will assign you to upcoming event shoots.</p>
-              </div>
-            ) : (
-              events.map((event) => (
-                <div
-                  key={event.id}
-                  className="bg-white border border-zinc-200/80 hover:border-zinc-300 rounded-xl overflow-hidden shadow-xs hover:shadow-md flex flex-col group transition-all"
-                >
-                  <div className="h-44 relative bg-zinc-100 overflow-hidden">
-                    <img
-                      src={event.coverPhotoUrl || 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1200'}
-                      alt={event.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-zinc-950/20 to-transparent" />
-                    <div className="absolute bottom-3 left-4 right-4">
-                      <h3 className="text-lg font-display font-bold text-white truncate">{event.name}</h3>
-                      {event.location && (
-                        <p className="text-xs text-zinc-200 flex items-center gap-1 mt-0.5 font-medium">
-                          <MapPin className="w-3.5 h-3.5 text-indigo-400" />
-                          <span>{event.location}</span>
-                        </p>
-                      )}
-                    </div>
-                  </div>
+        {/* Tab Buttons */}
+        <div className="flex items-center p-1 bg-zinc-100 border border-zinc-200/60 rounded-xl self-start sm:self-auto">
+          <button
+            onClick={() => setActiveTab('EVENTS')}
+            className={`px-4 py-1.5 rounded-lg text-xs font-medium transition-all ${
+              activeTab === 'EVENTS'
+                ? 'bg-zinc-900 text-white shadow-xs'
+                : 'text-zinc-500 hover:text-zinc-900'
+            }`}
+          >
+            Assigned Events ({events.length})
+          </button>
+          <button
+            onClick={() => setActiveTab('UPLOADS')}
+            className={`px-4 py-1.5 rounded-lg text-xs font-medium transition-all ${
+              activeTab === 'UPLOADS'
+                ? 'bg-zinc-900 text-white shadow-xs'
+                : 'text-zinc-500 hover:text-zinc-900'
+            }`}
+          >
+            My Uploads ({myPhotos.length})
+          </button>
+        </div>
+      </div>
 
-                  <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
-                    <div className="flex items-center justify-between text-xs text-zinc-500">
-                      <span className="flex items-center gap-1 font-medium">
-                        <Calendar className="w-3.5 h-3.5 text-zinc-400" />
-                        {new Date(event.eventDate).toLocaleDateString()}
-                      </span>
-                      <span className="flex items-center gap-1 font-semibold text-zinc-900">
-                        <ImageIcon className="w-3.5 h-3.5 text-indigo-600" />
-                        {event.totalPhotos} photos
-                      </span>
-                    </div>
-
-                    <button
-                      onClick={() => openUploadModal(event.id)}
-                      className="w-full py-2.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-white font-medium text-xs shadow-xs flex items-center justify-center space-x-2 transition-all"
-                    >
-                      <UploadCloud className="w-4 h-4 text-indigo-400" />
-                      <span>Upload Photographs</span>
-                    </button>
+      {isLoading ? (
+        <div className="p-12 text-center text-zinc-400 font-mono text-xs">Loading workspace...</div>
+      ) : activeTab === 'EVENTS' ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {events.length === 0 ? (
+            <div className="col-span-full p-12 text-center bg-white border border-zinc-200/80 rounded-2xl">
+              <Calendar className="w-10 h-10 text-zinc-300 mx-auto mb-3" />
+              <p className="text-sm font-semibold text-zinc-800">No Events Assigned Yet</p>
+              <p className="text-xs text-zinc-400 mt-1">Your Admin Lead will assign you to upcoming event shoots.</p>
+            </div>
+          ) : (
+            events.map((event) => (
+              <div
+                key={event.id}
+                className="bg-white border border-zinc-200/80 hover:border-zinc-300 rounded-xl overflow-hidden shadow-xs hover:shadow-md flex flex-col group transition-all"
+              >
+                <div className="h-44 relative bg-zinc-100 overflow-hidden">
+                  <img
+                    src={event.coverPhotoUrl || 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1200'}
+                    alt={event.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-zinc-950/20 to-transparent" />
+                  <div className="absolute bottom-3 left-4 right-4">
+                    <h3 className="text-lg font-display font-bold text-white truncate">{event.name}</h3>
+                    {event.location && (
+                      <p className="text-xs text-zinc-200 flex items-center gap-1 mt-0.5 font-medium">
+                        <MapPin className="w-3.5 h-3.5 text-indigo-400" />
+                        <span>{event.location}</span>
+                      </p>
+                    )}
                   </div>
                 </div>
-              ))
-            )}
-          </div>
-        ) : (
-          /* My Personal Uploads Grid */
-          <div>
-            {myPhotos.length === 0 ? (
-              <div className="p-12 text-center bg-white border border-zinc-200/80 rounded-2xl">
-                <ImageIcon className="w-10 h-10 text-zinc-300 mx-auto mb-3" />
-                <p className="text-sm font-semibold text-zinc-800">No Uploads Recorded</p>
-              </div>
-            ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                {myPhotos.map((photo, index) => (
-                  <div
-                    key={photo.id}
-                    onClick={() => setLightboxIndex(index)}
-                    className="group relative rounded-xl overflow-hidden bg-white border border-zinc-200/80 cursor-pointer shadow-xs hover:shadow-md transition-all"
+
+                <div className="p-5 flex-1 flex flex-col justify-between space-y-4">
+                  <div className="flex items-center justify-between text-xs text-zinc-500">
+                    <span className="flex items-center gap-1 font-medium">
+                      <Calendar className="w-3.5 h-3.5 text-zinc-400" />
+                      {new Date(event.eventDate).toLocaleDateString()}
+                    </span>
+                    <span className="flex items-center gap-1 font-semibold text-zinc-900">
+                      <ImageIcon className="w-3.5 h-3.5 text-indigo-600" />
+                      {event.totalPhotos} photos
+                    </span>
+                  </div>
+
+                  <button
+                    onClick={() => openUploadModal(event.id)}
+                    className="w-full py-2.5 rounded-lg bg-zinc-900 hover:bg-zinc-800 text-white font-medium text-xs shadow-xs flex items-center justify-center space-x-2 transition-all"
                   >
-                    <div className="aspect-square relative bg-zinc-100 overflow-hidden">
-                      <img
-                        src={photo.storageUrl}
-                        alt={photo.originalFilename}
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                        loading="lazy"
-                      />
-                      <div className="absolute inset-0 bg-zinc-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                        <span className="text-xs font-semibold text-zinc-900 bg-white/90 px-3 py-1 rounded-full shadow-xs">
-                          View Asset
-                        </span>
-                      </div>
-                    </div>
-                    <div className="p-2.5 text-[11px] text-zinc-600 flex items-center justify-between border-t border-zinc-100">
-                      <span className="truncate max-w-[110px] font-medium">{photo.originalFilename}</span>
-                      <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />
+                    <UploadCloud className="w-4 h-4 text-indigo-400" />
+                    <span>Upload Photographs</span>
+                  </button>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+      ) : (
+        /* My Personal Uploads Grid */
+        <div>
+          {myPhotos.length === 0 ? (
+            <div className="p-12 text-center bg-white border border-zinc-200/80 rounded-2xl">
+              <ImageIcon className="w-10 h-10 text-zinc-300 mx-auto mb-3" />
+              <p className="text-sm font-semibold text-zinc-800">No Uploads Recorded</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+              {myPhotos.map((photo, index) => (
+                <div
+                  key={photo.id}
+                  onClick={() => setLightboxIndex(index)}
+                  className="group relative rounded-xl overflow-hidden bg-white border border-zinc-200/80 cursor-pointer shadow-xs hover:shadow-md transition-all"
+                >
+                  <div className="aspect-square relative bg-zinc-100 overflow-hidden">
+                    <img
+                      src={photo.storageUrl}
+                      alt={photo.originalFilename}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                      loading="lazy"
+                    />
+                    <div className="absolute inset-0 bg-zinc-950/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <span className="text-xs font-semibold text-zinc-900 bg-white/90 px-3 py-1 rounded-full shadow-xs">
+                        View Asset
+                      </span>
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
+                  <div className="p-2.5 text-[11px] text-zinc-600 flex items-center justify-between border-t border-zinc-100">
+                    <span className="truncate max-w-[110px] font-medium">{photo.originalFilename}</span>
+                    <CheckCircle className="w-3.5 h-3.5 text-emerald-600" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
 
-        {/* Upload Modal */}
-        {activeEventId && (
-          <UploadModal
-            eventId={activeEventId}
-            isOpen={showUploadModal}
-            onClose={() => setShowUploadModal(false)}
-            onUploadComplete={loadData}
-          />
-        )}
+      {/* Upload Modal */}
+      {activeEventId && (
+        <UploadModal
+          eventId={activeEventId}
+          isOpen={showUploadModal}
+          onClose={() => setShowUploadModal(false)}
+          onUploadComplete={loadData}
+        />
+      )}
 
-        {/* Lightbox */}
-        {lightboxIndex !== null && (
-          <Lightbox
-            photos={myPhotos}
-            currentIndex={lightboxIndex}
-            isOpen={lightboxIndex !== null}
-            onClose={() => setLightboxIndex(null)}
-            onNavigate={(idx) => setLightboxIndex(idx)}
-          />
-        )}
-      </div>
+      {/* Lightbox */}
+      {lightboxIndex !== null && (
+        <Lightbox
+          photos={myPhotos}
+          currentIndex={lightboxIndex}
+          isOpen={lightboxIndex !== null}
+          onClose={() => setLightboxIndex(null)}
+          onNavigate={(idx) => setLightboxIndex(idx)}
+        />
+      )}
     </div>
   );
 };

@@ -1,5 +1,5 @@
-import React from 'react';
-import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Routes, Route, Navigate, Outlet, useOutletContext } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Navbar } from '../components/Navbar';
 import { Sidebar } from '../components/Sidebar';
@@ -12,11 +12,22 @@ import { TeamManagement } from '../pages/TeamManagement';
 import { MemberDashboard } from '../pages/MemberDashboard';
 import { CustomerGallery } from '../pages/CustomerGallery';
 
+interface LayoutContextType {
+  openCreateEventModal?: () => void;
+}
+
+export const useLayoutContext = () => useOutletContext<LayoutContextType>();
+
 const ProtectedLayout: React.FC<{ allowedRoles?: string[] }> = ({ allowedRoles }) => {
   const { user, isLoading } = useAuth();
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   if (isLoading) {
-    return <div className="min-h-screen bg-zinc-950 flex items-center justify-center text-zinc-500">Loading...</div>;
+    return (
+      <div className="min-h-screen bg-[#FAFAFA] flex items-center justify-center text-zinc-400 font-mono text-xs">
+        Loading workspace...
+      </div>
+    );
   }
 
   if (!user) {
@@ -28,14 +39,12 @@ const ProtectedLayout: React.FC<{ allowedRoles?: string[] }> = ({ allowedRoles }
   }
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 flex flex-col font-sans">
-      <Navbar />
-      <div className="flex flex-1">
-        <Sidebar />
-        <main className="flex-1 overflow-x-hidden">
-          <Outlet />
-        </main>
-      </div>
+    <div className="min-h-screen bg-[#FAFAFA] text-zinc-900 font-sans">
+      <Sidebar />
+      <Navbar onNewEventClick={() => setIsCreateModalOpen(true)} />
+      <main className="lg:pl-64 pt-16 flex-1 min-h-screen bg-[#FAFAFA]">
+        <Outlet context={{ openCreateEventModal: () => setIsCreateModalOpen(true), isCreateModalOpen, setIsCreateModalOpen }} />
+      </main>
     </div>
   );
 };
