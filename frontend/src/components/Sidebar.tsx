@@ -1,7 +1,7 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { LayoutDashboard, Calendar, Users, UploadCloud, Settings, Image } from 'lucide-react';
+import { LayoutDashboard, Calendar, Users, Image } from 'lucide-react';
 
 export const Sidebar: React.FC = () => {
   const { user } = useAuth();
@@ -22,9 +22,9 @@ export const Sidebar: React.FC = () => {
   const links = isAdmin ? adminLinks : memberLinks;
 
   return (
-    <aside className="w-64 bg-zinc-900 border-r border-zinc-800 hidden md:flex flex-col min-h-[calc(100vh-4rem)] p-4 text-zinc-300">
+    <aside className="w-64 bg-white border-r border-slate-200 hidden md:flex flex-col min-h-[calc(100vh-4rem)] p-4 text-slate-700">
       <div className="space-y-1">
-        <p className="px-3 text-xs font-semibold text-zinc-500 uppercase tracking-wider mb-2">
+        <p className="px-3 text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-3">
           {isAdmin ? 'Management Studio' : 'Workspace'}
         </p>
         {links.map((link) => {
@@ -35,10 +35,10 @@ export const Sidebar: React.FC = () => {
               to={link.to}
               end={link.end}
               className={({ isActive }) =>
-                `flex items-center space-x-3 px-3 py-2.5 rounded-xl font-medium text-sm transition-all duration-200 ${
+                `flex items-center space-x-3 px-3 py-2.5 rounded-xl font-medium text-xs transition-all duration-150 ${
                   isActive
-                    ? 'bg-indigo-600/10 text-indigo-400 border border-indigo-500/20 font-semibold shadow-sm'
-                    : 'text-zinc-400 hover:text-zinc-100 hover:bg-zinc-800/60'
+                    ? 'bg-slate-900 text-white font-semibold shadow-xs'
+                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                 }`
               }
             >
@@ -49,10 +49,10 @@ export const Sidebar: React.FC = () => {
         })}
       </div>
 
-      <div className="mt-auto pt-6 border-t border-zinc-800/80">
-        <div className="bg-zinc-800/40 border border-zinc-800 rounded-xl p-3 text-xs text-zinc-400">
-          <p className="font-semibold text-zinc-300 mb-1">Collaborative Mode</p>
-          <p className="leading-relaxed">All event uploads and gallery publishing are tracked and secured.</p>
+      <div className="mt-auto pt-6 border-t border-slate-100">
+        <div className="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 text-xs text-slate-600">
+          <p className="font-display font-semibold text-slate-900 mb-1">Collaborative Studio</p>
+          <p className="text-[11px] leading-relaxed text-slate-500">Event photo uploads and PIN-protected gallery publishing.</p>
         </div>
       </div>
     </aside>
