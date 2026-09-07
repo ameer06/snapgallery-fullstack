@@ -6,6 +6,7 @@ import { Event, EventMember, Gallery, User } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 import { Calendar, MapPin, Users, Plus, Lock, Globe, Share2, Check, ArrowRight, UserPlus, Trash2 } from 'lucide-react';
 import { UploadModal } from '../components/UploadModal';
+import { getImageUrl } from '../utils/image';
 
 export const EventDetail: React.FC = () => {
   const { eventId } = useParams<{ eventId: string }>();
@@ -91,7 +92,7 @@ export const EventDetail: React.FC = () => {
       <div className="relative rounded-3xl overflow-hidden bg-white border border-slate-200 shadow-sm">
         <div className="h-64 sm:h-80 relative overflow-hidden">
           <img
-            src={event.coverPhotoUrl || 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1200'}
+            src={getImageUrl(event.coverPhotoUrl)}
             alt={event.name}
             className="w-full h-full object-cover"
           />

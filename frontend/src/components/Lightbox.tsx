@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { Photo } from '../types';
 import { X, ChevronLeft, ChevronRight, Download, User, Calendar, HardDrive } from 'lucide-react';
+import { getImageUrl } from '../utils/image';
 
 interface LightboxProps {
   photos: Photo[];
@@ -47,7 +48,7 @@ export const Lightbox: React.FC<LightboxProps> = ({
 
         <div className="flex items-center space-x-3">
           <a
-            href={currentPhoto.storageUrl}
+            href={getImageUrl(currentPhoto.storageUrl)}
             target="_blank"
             rel="noopener noreferrer"
             download
@@ -87,7 +88,7 @@ export const Lightbox: React.FC<LightboxProps> = ({
       {/* Main Image Container */}
       <div className="max-w-6xl max-h-[85vh] p-4 flex flex-col items-center justify-center">
         <img
-          src={currentPhoto.storageUrl}
+          src={getImageUrl(currentPhoto.storageUrl)}
           alt={currentPhoto.originalFilename}
           className="max-h-[75vh] max-w-full object-contain rounded-xl shadow-2xl select-none"
         />

@@ -6,6 +6,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { Calendar, UploadCloud, Image as ImageIcon, MapPin, CheckCircle } from 'lucide-react';
 import { UploadModal } from '../components/UploadModal';
 import { Lightbox } from '../components/Lightbox';
+import { getImageUrl } from '../utils/image';
 
 export const MemberDashboard: React.FC = () => {
   const { user } = useAuth();
@@ -98,7 +99,7 @@ export const MemberDashboard: React.FC = () => {
               >
                 <div className="h-44 relative bg-zinc-100 overflow-hidden">
                   <img
-                    src={event.coverPhotoUrl || 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1200'}
+                    src={getImageUrl(event.coverPhotoUrl)}
                     alt={event.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
@@ -156,7 +157,7 @@ export const MemberDashboard: React.FC = () => {
                 >
                   <div className="aspect-square relative bg-zinc-100 overflow-hidden">
                     <img
-                      src={photo.storageUrl}
+                      src={getImageUrl(photo.storageUrl)}
                       alt={photo.originalFilename}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       loading="lazy"

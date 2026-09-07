@@ -5,6 +5,7 @@ import com.snapgallery.event.Event;
 import com.snapgallery.event.EventMemberRepository;
 import com.snapgallery.event.EventRepository;
 import com.snapgallery.exception.ApiException;
+import com.snapgallery.gallery.GalleryPhotoRepository;
 import com.snapgallery.storage.LocalStorageService;
 import com.snapgallery.user.User;
 import com.snapgallery.user.UserRepository;
@@ -31,6 +32,8 @@ public class PhotoService {
     private final EventMemberRepository eventMemberRepository;
     private final UserRepository userRepository;
     private final LocalStorageService storageService;
+
+    private final GalleryPhotoRepository galleryPhotoRepository;
 
     private static final Set<String> ALLOWED_EXTENSIONS = Set.of("jpg", "jpeg", "png", "webp");
     private static final Set<String> ALLOWED_MIME_TYPES = Set.of("image/jpeg", "image/png", "image/webp");
@@ -112,6 +115,7 @@ public class PhotoService {
             throw ApiException.forbidden("You do not have permission to delete this photo", "DELETE_FORBIDDEN");
         }
 
+        galleryPhotoRepository.deleteByPhotoId(photoId);
         storageService.delete(photo.getStorageKey());
         photoRepository.delete(photo);
     }

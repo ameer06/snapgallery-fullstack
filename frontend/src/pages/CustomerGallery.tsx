@@ -4,6 +4,7 @@ import { galleryApi } from '../api/gallery';
 import { Photo, PublicGalleryInfo } from '../types';
 import { PINModal } from '../components/PINModal';
 import { Lightbox } from '../components/Lightbox';
+import { getImageUrl } from '../utils/image';
 import { 
   Camera, 
   Calendar, 
@@ -94,7 +95,7 @@ export const CustomerGallery: React.FC = () => {
   const handleDownloadSingle = (photo: Photo, e: React.MouseEvent) => {
     e.stopPropagation();
     const link = document.createElement('a');
-    link.href = photo.storageUrl;
+    link.href = getImageUrl(photo.storageUrl);
     link.download = photo.originalFilename || 'photo.jpg';
     link.target = '_blank';
     document.body.appendChild(link);
@@ -125,7 +126,7 @@ export const CustomerGallery: React.FC = () => {
     );
   }
 
-  const coverImage = photos[0]?.storageUrl || 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1600';
+  const coverImage = getImageUrl(photos[0]?.storageUrl);
 
   return (
     <div className="min-h-screen bg-[#FAFAFA] text-zinc-900 selection:bg-indigo-600 selection:text-white">
@@ -251,7 +252,7 @@ export const CustomerGallery: React.FC = () => {
                 }`}
               >
                 <img
-                  src={photo.storageUrl}
+                  src={getImageUrl(photo.storageUrl)}
                   alt={photo.originalFilename}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
                   loading="lazy"

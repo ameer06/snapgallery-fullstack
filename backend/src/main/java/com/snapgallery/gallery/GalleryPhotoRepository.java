@@ -15,6 +15,7 @@ public interface GalleryPhotoRepository extends JpaRepository<GalleryPhoto, Stri
     List<GalleryPhoto> findByGalleryId(String galleryId);
     
     void deleteByGalleryId(String galleryId);
+    void deleteByPhotoId(String photoId);
 
     @Query("SELECT gp.photo FROM GalleryPhoto gp WHERE gp.gallery.id = :galleryId")
     Page<Photo> findPhotosByGalleryId(@Param("galleryId") String galleryId, Pageable pageable);

@@ -15,6 +15,7 @@ import {
   Check 
 } from 'lucide-react';
 import { useLayoutContext } from '../router/AppRouter';
+import { getImageUrl } from '../utils/image';
 
 export const AdminDashboard: React.FC = () => {
   const [events, setEvents] = useState<Event[]>([]);
@@ -260,7 +261,7 @@ export const AdminDashboard: React.FC = () => {
               >
                 <div className="relative w-full md:w-56 h-48 md:h-auto rounded-lg overflow-hidden shrink-0 bg-zinc-100">
                   <img
-                    src={event.coverPhotoUrl || 'https://images.unsplash.com/photo-1519741497674-611481863552?w=1200'}
+                    src={getImageUrl(event.coverPhotoUrl)}
                     alt={event.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />

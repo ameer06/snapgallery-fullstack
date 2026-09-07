@@ -28,6 +28,7 @@ import {
   Star,
   Users
 } from 'lucide-react';
+import { getImageUrl } from '../utils/image';
 
 export const PhotoReview: React.FC = () => {
   const { eventId } = useParams<{ eventId: string }>();
@@ -129,16 +130,26 @@ export const PhotoReview: React.FC = () => {
   };
 
   const handleDeleteSelected = async () => {
-    if (!confirm(`Delete ${selectedPhotoIds.size} selected photos? This action cannot be undone.`)) return;
-    for (const id of Array.from(selectedPhotoIds)) {
+    if (selectedPhotoIds.size === 0) return;
+    if (!confirm(`Delete ${selectedPhotoIds.size} selected photo(s)? This action cannot be undone.`)) return;
+    
+    const idsToDelete = Array.from(selectedPhotoIds);
+    // Optimistic UI update
+    setPhotos(prev => prev.filter(p => !selectedPhotoIds.has(p.id)));
+    setSelectedPhotoIds(new Set());
+
+    let errorOccurred = false;
+    for (const id of idsToDelete) {
       try {
         await photosApi.deletePhoto(id);
-      } catch (err) {
-        console.error(err);
+      } catch (err: any) {
+        console.error('Delete photo failed:', err);
+        errorOccurred = true;
+        alert(`Failed to delete photo: ${err.message || 'Server error'}`);
       }
     }
-    setSelectedPhotoIds(new Set());
-    loadData();
+    
+    await loadData();
   };
 
   const filteredPhotos = photos.filter((p) => {
@@ -394,7 +405,7 @@ export const PhotoReview: React.FC = () => {
                   {/* Image Container */}
                   <div className="aspect-square relative overflow-hidden bg-zinc-100">
                     <img
-                      src={photo.storageUrl}
+                      src={getImageUrl(photo.storageUrl)}
                       alt={photo.originalFilename}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       loading="lazy"
