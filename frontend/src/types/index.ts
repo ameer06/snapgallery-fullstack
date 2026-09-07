@@ -23,6 +23,8 @@ export interface Event {
   createdBy: User;
   totalPhotos: number;
   totalMembers: number;
+  galleryPublished?: boolean;
+  gallerySlug?: string;
   createdAt: string;
   updatedAt?: string;
 }
