@@ -26,7 +26,8 @@ import {
   SlidersHorizontal,
   Copy,
   Star,
-  Users
+  Users,
+  RefreshCw
 } from 'lucide-react';
 import { getImageUrl } from '../utils/image';
 
@@ -46,9 +47,11 @@ export const PhotoReview: React.FC = () => {
 
   // Create Gallery Modal State
   const [showGalleryModal, setShowGalleryModal] = useState(false);
+  const generateRandomPin = () => Math.floor(100000 + Math.random() * 900000).toString();
+
   const [galleryName, setGalleryName] = useState('');
   const [galleryDescription, setGalleryDescription] = useState('');
-  const [pin, setPin] = useState('482917');
+  const [pin, setPin] = useState(generateRandomPin);
   const [publishImmediately, setPublishImmediately] = useState(true);
   const [isCreatingGallery, setIsCreatingGallery] = useState(false);
   const [createdGallerySlug, setCreatedGallerySlug] = useState<string | null>(null);
@@ -466,6 +469,7 @@ export const PhotoReview: React.FC = () => {
             <button
               onClick={() => {
                 setGalleryName(`${event?.name || 'Event'} — Private Customer Gallery`);
+                setPin(generateRandomPin());
                 setShowGalleryModal(true);
               }}
               className="flex items-center space-x-2 px-4 py-2 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs shadow-md transition-all"
@@ -570,7 +574,17 @@ export const PhotoReview: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-zinc-600 uppercase tracking-wider mb-1">6-Digit Customer PIN</label>
+                  <div className="flex items-center justify-between mb-1">
+                    <label className="block text-xs font-semibold text-zinc-600 uppercase tracking-wider">6-Digit Customer PIN</label>
+                    <button
+                      type="button"
+                      onClick={() => setPin(generateRandomPin())}
+                      className="text-[11px] font-semibold text-indigo-600 hover:text-indigo-500 flex items-center gap-1 transition-colors"
+                    >
+                      <RefreshCw className="w-3 h-3" />
+                      <span>Randomize PIN</span>
+                    </button>
+                  </div>
                   <input
                     type="text"
                     required
