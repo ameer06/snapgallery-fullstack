@@ -5,11 +5,22 @@
 @layer base {
   body {
     @apply bg-slate-50 text-slate-900 font-sans antialiased selection:bg-indigo-600 selection:text-white;
+    cursor: default;
   }
 
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Plus Jakarta Sans', sans-serif;
     @apply tracking-tight text-slate-900;
+  }
+
+  /* Disable text caret/cursor insertion on non-input elements */
+  *:not(input):not(textarea):not([contenteditable="true"]) {
+    caret-color: transparent !important;
+  }
+
+  input, textarea, [contenteditable="true"] {
+    caret-color: auto !important;
+    cursor: text;
   }
 }
 
