@@ -14,14 +14,23 @@ import {
   Copy, 
   Check 
 } from 'lucide-react';
+import { useOutletContext } from 'react-router-dom';
 import { useLayoutContext } from '../router/AppRouter';
 import { getImageUrl } from '../utils/image';
 
 export const AdminDashboard: React.FC = () => {
+  const { isCreateModalOpen, setIsCreateModalOpen } = (useOutletContext() || {}) as any;
   const [events, setEvents] = useState<Event[]>([]);
   const [teamMembers, setTeamMembers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
+
+  useEffect(() => {
+    if (isCreateModalOpen) {
+      setShowCreateModal(true);
+      if (setIsCreateModalOpen) setIsCreateModalOpen(false);
+    }
+  }, [isCreateModalOpen, setIsCreateModalOpen]);
   const [activeFilter, setActiveFilter] = useState<'all' | 'review' | 'published'>('all');
   const [copiedEventId, setCopiedEventId] = useState<string | null>(null);
 
