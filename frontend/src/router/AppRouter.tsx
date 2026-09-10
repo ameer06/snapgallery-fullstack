@@ -56,7 +56,17 @@ const ProtectedLayout: React.FC<{ allowedRoles?: string[] }> = ({ allowedRoles }
 
 const RootRedirect: React.FC = () => {
   const { user, isLoading } = useAuth();
-  if (isLoading) return null;
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-zinc-950 flex flex-col items-center justify-center text-white p-6">
+        <div className="w-10 h-10 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin mb-4" />
+        <span className="font-display font-bold text-lg tracking-tight text-white mb-1">SnapGallery</span>
+        <span className="text-xs text-zinc-400 font-mono">Connecting to cloud server...</span>
+      </div>
+    );
+  }
+
   if (!user) return <Navigate to="/login" replace />;
   return <Navigate to={user.role === 'ADMIN' ? '/admin' : '/member'} replace />;
 };

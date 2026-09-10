@@ -23,7 +23,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const storedToken = localStorage.getItem('snapgallery_token');
       if (storedToken) {
         try {
-          const currentUser = await authApi.getCurrentUser();
+          const currentUser = await Promise.race([
+            authApi.getCurrentUser(),
+            new Promise<never>((_, reject) =>
+              setTimeout(() => reject(new Error('Server timeout')), 12000)
+            ),
+          ]);
           setUser(currentUser);
           setToken(storedToken);
         } catch (err) {
