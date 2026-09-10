@@ -21,6 +21,7 @@ export const useLayoutContext = () => useOutletContext<LayoutContextType>();
 const ProtectedLayout: React.FC<{ allowedRoles?: string[] }> = ({ allowedRoles }) => {
   const { user, isLoading } = useAuth();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
 
   if (isLoading) {
     return (
@@ -41,9 +42,13 @@ const ProtectedLayout: React.FC<{ allowedRoles?: string[] }> = ({ allowedRoles }
   return (
     <div className="min-h-screen bg-[#FAFAFA] text-zinc-900 font-sans">
       <Sidebar />
-      <Navbar onNewEventClick={() => setIsCreateModalOpen(true)} />
+      <Navbar 
+        searchQuery={searchQuery}
+        onSearchChange={setSearchQuery}
+        onNewEventClick={() => setIsCreateModalOpen(true)} 
+      />
       <main className="lg:pl-64 pt-16 flex-1 min-h-screen bg-[#FAFAFA]">
-        <Outlet context={{ openCreateEventModal: () => setIsCreateModalOpen(true), isCreateModalOpen, setIsCreateModalOpen }} />
+        <Outlet context={{ searchQuery, setSearchQuery, openCreateEventModal: () => setIsCreateModalOpen(true), isCreateModalOpen, setIsCreateModalOpen }} />
       </main>
     </div>
   );

@@ -7,13 +7,20 @@ interface NavbarProps {
   onNewEventClick?: () => void;
   title?: string;
   subtitle?: string;
+  searchQuery?: string;
+  onSearchChange?: (query: string) => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onNewEventClick, title = "Studio", subtitle = "Workspace" }) => {
+export const Navbar: React.FC<NavbarProps> = ({ 
+  onNewEventClick, 
+  title = "Studio", 
+  subtitle = "Workspace",
+  searchQuery = '',
+  onSearchChange,
+}) => {
   const { user } = useAuth();
   const isAdmin = user?.role === 'ADMIN';
 
-  const [searchQuery, setSearchQuery] = useState('');
   const [showNotifications, setShowNotifications] = useState(false);
 
   return (
@@ -44,12 +51,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onNewEventClick, title = "Studio
           <input
             type="text"
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search assets, tags, shots..."
+            onChange={(e) => onSearchChange?.(e.target.value)}
+            placeholder="Search events, locations, tags..."
             className="w-full bg-transparent text-xs text-zinc-900 placeholder:text-zinc-400 outline-none font-medium"
           />
           {searchQuery ? (
-            <button onClick={() => setSearchQuery('')} className="text-zinc-400 hover:text-zinc-600">
+            <button onClick={() => onSearchChange?.('')} className="text-zinc-400 hover:text-zinc-600">
               <X className="w-3.5 h-3.5" />
             </button>
           ) : (

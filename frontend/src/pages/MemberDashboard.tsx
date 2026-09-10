@@ -4,12 +4,14 @@ import { photosApi } from '../api/photos';
 import { Event, Photo } from '../types';
 import { useAuth } from '../contexts/AuthContext';
 import { Calendar, UploadCloud, Image as ImageIcon, MapPin, CheckCircle } from 'lucide-react';
+import { useOutletContext } from 'react-router-dom';
 import { UploadModal } from '../components/UploadModal';
 import { Lightbox } from '../components/Lightbox';
 import { getImageUrl } from '../utils/image';
 
 export const MemberDashboard: React.FC = () => {
   const { user } = useAuth();
+  const { searchQuery } = (useOutletContext() || {}) as any;
   const [events, setEvents] = useState<Event[]>([]);
   const [myPhotos, setMyPhotos] = useState<Photo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -42,6 +44,25 @@ export const MemberDashboard: React.FC = () => {
     setShowUploadModal(true);
   };
 
+  const filteredEvents = events.filter((e) => {
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      const matchName = e.name?.toLowerCase().includes(q);
+      const matchLoc = e.location?.toLowerCase().includes(q);
+      const matchDesc = e.description?.toLowerCase().includes(q);
+      if (!matchName && !matchLoc && !matchDesc) return false;
+    }
+    return true;
+  });
+
+  const filteredPhotos = myPhotos.filter((p) => {
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      return p.originalFilename?.toLowerCase().includes(q);
+    }
+    return true;
+  });
+
   return (
     <div className="p-6 sm:p-8 max-w-[1440px] mx-auto space-y-8 text-zinc-900 pb-16">
       {/* Header */}
@@ -66,7 +87,7 @@ export const MemberDashboard: React.FC = () => {
                 : 'text-zinc-500 hover:text-zinc-900'
             }`}
           >
-            Assigned Events ({events.length})
+            Assigned Events ({filteredEvents.length})
           </button>
           <button
             onClick={() => setActiveTab('UPLOADS')}
@@ -76,7 +97,7 @@ export const MemberDashboard: React.FC = () => {
                 : 'text-zinc-500 hover:text-zinc-900'
             }`}
           >
-            My Uploads ({myPhotos.length})
+            My Uploads ({filteredPhotos.length})
           </button>
         </div>
       </div>
@@ -85,14 +106,14 @@ export const MemberDashboard: React.FC = () => {
         <div className="p-12 text-center text-zinc-400 font-mono text-xs">Loading workspace...</div>
       ) : activeTab === 'EVENTS' ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {events.length === 0 ? (
+          {filteredEvents.length === 0 ? (
             <div className="col-span-full p-12 text-center bg-white border border-zinc-200/80 rounded-2xl">
               <Calendar className="w-10 h-10 text-zinc-300 mx-auto mb-3" />
-              <p className="text-sm font-semibold text-zinc-800">No Events Assigned Yet</p>
-              <p className="text-xs text-zinc-400 mt-1">Your Admin Lead will assign you to upcoming event shoots.</p>
+              <p className="text-sm font-semibold text-zinc-800">No Events Found</p>
+              <p className="text-xs text-zinc-400 mt-1">Try refining your search query or check back later.</p>
             </div>
           ) : (
-            events.map((event) => (
+            filteredEvents.map((event) => (
               <div
                 key={event.id}
                 className="bg-white border border-zinc-200/80 hover:border-zinc-300 rounded-xl overflow-hidden shadow-xs hover:shadow-md flex flex-col group transition-all"
@@ -142,14 +163,15 @@ export const MemberDashboard: React.FC = () => {
       ) : (
         /* My Personal Uploads Grid */
         <div>
-          {myPhotos.length === 0 ? (
+          {filteredPhotos.length === 0 ? (
             <div className="p-12 text-center bg-white border border-zinc-200/80 rounded-2xl">
               <ImageIcon className="w-10 h-10 text-zinc-300 mx-auto mb-3" />
-              <p className="text-sm font-semibold text-zinc-800">No Uploads Recorded</p>
+              <p className="text-sm font-semibold text-zinc-800">No Uploads Found</p>
+              <p className="text-xs text-zinc-400 mt-1">Try refining your search query or upload new photographs.</p>
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {myPhotos.map((photo, index) => (
+              {filteredPhotos.map((photo, index) => (
                 <div
                   key={photo.id}
                   onClick={() => setLightboxIndex(index)}

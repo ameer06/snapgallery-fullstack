@@ -19,7 +19,7 @@ import { useLayoutContext } from '../router/AppRouter';
 import { getImageUrl } from '../utils/image';
 
 export const AdminDashboard: React.FC = () => {
-  const { isCreateModalOpen, setIsCreateModalOpen } = (useOutletContext() || {}) as any;
+  const { isCreateModalOpen, setIsCreateModalOpen, searchQuery } = (useOutletContext() || {}) as any;
   const [events, setEvents] = useState<Event[]>([]);
   const [teamMembers, setTeamMembers] = useState<User[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -91,6 +91,13 @@ export const AdminDashboard: React.FC = () => {
   const totalPhotos = events.reduce((acc, curr) => acc + (curr.totalPhotos || 0), 0);
 
   const filteredEvents = events.filter((e) => {
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      const matchName = e.name?.toLowerCase().includes(q);
+      const matchLoc = e.location?.toLowerCase().includes(q);
+      const matchDesc = e.description?.toLowerCase().includes(q);
+      if (!matchName && !matchLoc && !matchDesc) return false;
+    }
     if (activeFilter === 'published') return !!e.galleryPublished;
     if (activeFilter === 'review') return !e.galleryPublished;
     return true;
